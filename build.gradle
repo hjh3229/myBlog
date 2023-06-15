@@ -22,6 +22,13 @@ repositories {
 }
 
 dependencies {
+    // JPA 설정
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    // MySQL
+    implementation 'mysql:mysql-connector-java:8.0.28'
+
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
