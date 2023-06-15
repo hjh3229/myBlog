@@ -3,6 +3,8 @@ package com.sparta.myblogbackend.controller;
 import com.sparta.myblogbackend.dto.BlogRequestDto;
 import com.sparta.myblogbackend.dto.BlogResponseDto;
 import com.sparta.myblogbackend.service.BlogService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,12 +34,14 @@ public class BlogController {
     }
 
     @PutMapping("/blog")
-    public Long updateBlog(@RequestParam String password, @RequestParam Long id, @RequestBody BlogRequestDto requestDto) {
-        return blogService.updateBlog(password, id, requestDto);
+    public ResponseEntity<String> updateBlog(@RequestParam String password, @RequestParam Long id, @RequestBody BlogRequestDto requestDto) {
+        blogService.updateBlog(password, id, requestDto);
+        return ResponseEntity.status(HttpStatus.OK).body("수정 성공");
     }
 
     @DeleteMapping("/blog")
-    public Long deleteBlog(@RequestParam String password, @RequestParam Long id) {
-        return blogService.deleteBlog(password, id);
+    public ResponseEntity<String> deleteBlog(@RequestParam String password, @RequestParam Long id) {
+        blogService.deleteBlog(password, id);
+        return ResponseEntity.status(HttpStatus.OK).body("삭제 성공");
     }
 }
