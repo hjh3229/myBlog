@@ -31,13 +31,13 @@ public class BlogController {
         return blogService.getBlogsByKeyword(keyword);
     }
 
-    @PutMapping("/blog/update/{id}/{password}")
-    public Long updateBlog(@PathVariable String password, @PathVariable Long id, @RequestBody BlogRequestDto requestDto) {
+    @PutMapping("/blog")
+    public Long updateBlog(@RequestParam String password, @RequestParam Long id, @RequestBody BlogRequestDto requestDto) {
         return blogService.updateBlog(password, id, requestDto);
     }
 
-    @DeleteMapping("/blog/{id}/{password}")
-    public Long deleteBlog(@PathVariable String password, @PathVariable Long id) {
+    @DeleteMapping("/blog")
+    public Long deleteBlog(@RequestParam String password, @RequestParam Long id) {
         return blogService.deleteBlog(password, id);
     }
 }
