@@ -2,7 +2,6 @@ package com.sparta.myblogbackend.controller;
 
 import com.sparta.myblogbackend.dto.BlogRequestDto;
 import com.sparta.myblogbackend.dto.BlogResponseDto;
-import com.sparta.myblogbackend.entity.Blog;
 import com.sparta.myblogbackend.service.BlogService;
 import org.springframework.web.bind.annotation.*;
 

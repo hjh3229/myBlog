@@ -5,6 +5,7 @@ import com.sparta.myblogbackend.dto.BlogResponseDto;
 import com.sparta.myblogbackend.entity.Blog;
 import com.sparta.myblogbackend.repository.BlogRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -34,6 +35,7 @@ public class BlogService {
         return blogRepository.findAllByContentsContainingOrderByModifiedAtDesc(keyword).stream().map(BlogResponseDto::new).toList();
     }
 
+    @Transactional
     public Long updateBlog(String password, Long id, BlogRequestDto requestDto) {
         matchPassword(password);
         Blog blog = findBlog(id);
@@ -42,18 +44,6 @@ public class BlogService {
         return id;
     }
 
-    private Blog findBlog(Long id) {
-        return blogRepository.findById(id).orElseThrow(() -> // null 체크
-                new IllegalArgumentException("선택한 메모는 존재하지 않습니다.")
-        );
-    }
-
-    private void matchPassword(String password) {
-        Blog blog = blogRepository.findByPasswordEquals(password);
-        if (blog == null) {
-            throw new NullPointerException("비밀번호가 일치하지 않습니다.");
-        }
-    }
 
     public Long deleteBlog(String password, Long id) {
         matchPassword(password);
@@ -61,5 +51,19 @@ public class BlogService {
 
         blogRepository.delete(blog);
         return id;
+    }
+
+
+    private Blog findBlog(Long id) {
+        return blogRepository.findById(id).orElseThrow(() -> // null 체크
+                new IllegalArgumentException("선택한 메모는 존재하지 않습니다.")
+        );
+    }
+
+    private void matchPassword(String password) {
+        List<Blog> blog = blogRepository.findAllByPasswordEquals(password);
+        if (blog == null) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
     }
 }
