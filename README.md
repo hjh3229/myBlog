@@ -1,7 +1,11 @@
 # myBlogBackend
 유스 케이스
-![유스케이스](https://github.com/hjh3229/myBlogBackend/assets/110877415/6d855dda-2638-49de-a499-b29448ed6d1c)
+![유스케이스](https://github.com/hjh3229/myBlog/assets/110877415/0dad96de-7f0f-4b31-bd8e-bf1b4263184b)
 
 API 명세서
 
-![api](https://github.com/hjh3229/myBlogBackend/assets/110877415/785aa6ab-56e5-470d-9a92-ce083a9a7c96)
+Blog
+https://documenter.getpostman.com/view/27923993/2s93z59jS7
+
+User
+https://documenter.getpostman.com/view/27923993/2s93z59jWR
