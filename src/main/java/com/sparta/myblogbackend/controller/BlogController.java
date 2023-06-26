@@ -34,9 +34,9 @@ public class BlogController {
     }
 
     @PutMapping("/blog")
-    public ResponseEntity<String> updateBlog(@RequestParam String password, @RequestParam Long id, @RequestBody BlogRequestDto requestDto) {
-        blogService.updateBlog(password, id, requestDto);
-        return ResponseEntity.status(HttpStatus.OK).body("수정 성공");
+    @ResponseBody
+    public String updateBlog(@RequestParam String password, @RequestParam Long id, @RequestBody BlogRequestDto requestDto) {
+        return blogService.updateBlog(password, id, requestDto);
     }
 
     @DeleteMapping("/blog")

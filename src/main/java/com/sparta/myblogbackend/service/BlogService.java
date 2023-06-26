@@ -36,21 +36,22 @@ public class BlogService {
     }
 
     @Transactional
-    public Long updateBlog(String password, Long id, BlogRequestDto requestDto) {
+    public String updateBlog(String password, Long id, BlogRequestDto requestDto) {
         matchPassword(password);
         Blog blog = findBlog(id);
 
         blog.update(requestDto);
-        return id;
+
+        String updatedContents = blog.getContents();
+        return updatedContents;
     }
 
 
-    public Long deleteBlog(String password, Long id) {
+    public void deleteBlog(String password, Long id) {
         matchPassword(password);
         Blog blog = findBlog(id);
 
         blogRepository.delete(blog);
-        return id;
     }
 
 
