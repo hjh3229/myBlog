@@ -22,9 +22,7 @@ public class BlogController {
     private final JwtUtil jwtUtil;
 
     @PostMapping("/blog")
-    public BlogResponseDto createBlog(@RequestBody BlogRequestDto requestDto, HttpServletResponse res) {
-        String token = jwtUtil.createToken(requestDto.getUsername());
-        jwtUtil.addJwtToCookie(token, res);
+    public BlogResponseDto createBlog(@RequestBody BlogRequestDto requestDto) {
         return blogService.createBlog(requestDto);
     }
 
@@ -40,22 +38,12 @@ public class BlogController {
 
     @PutMapping("/blog")
     @ResponseBody
-    public String updateBlog(@RequestParam Long id, @RequestBody BlogRequestDto requestDto, @RequestHeader String tokenValue) {
-        String token = jwtUtil.substringToken(tokenValue);
-
-        if(!jwtUtil.validateToken(token)){
-            throw new IllegalArgumentException("Token Error");
-        }
+    public String updateBlog(@RequestParam Long id, @RequestBody BlogRequestDto requestDto) {
         return blogService.updateBlog(id, requestDto);
     }
 
     @DeleteMapping("/blog")
-    public ResponseEntity<String> deleteBlog(@RequestParam Long id, @RequestHeader String tokenValue) {
-        String token = jwtUtil.substringToken(tokenValue);
-
-        if(!jwtUtil.validateToken(token)){
-            throw new IllegalArgumentException("Token Error");
-        }
+    public ResponseEntity<String> deleteBlog(@RequestParam Long id) {
         blogService.deleteBlog(id);
         return ResponseEntity.status(HttpStatus.OK).body("삭제 성공");
     }
