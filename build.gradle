@@ -24,7 +24,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
     // MySQL
-    implementation 'mysql:mysql-connector-java:8.0.28'
+    runtimeOnly 'com.mysql:mysql-connector-j'
 
     // JWT
     compileOnly group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'

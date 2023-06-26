@@ -36,8 +36,7 @@ public class BlogService {
     }
 
     @Transactional
-    public String updateBlog(String password, Long id, BlogRequestDto requestDto) {
-        matchPassword(password);
+    public String updateBlog(Long id, BlogRequestDto requestDto) {
         Blog blog = findBlog(id);
 
         blog.update(requestDto);
@@ -47,8 +46,7 @@ public class BlogService {
     }
 
 
-    public void deleteBlog(String password, Long id) {
-        matchPassword(password);
+    public void deleteBlog(Long id) {
         Blog blog = findBlog(id);
 
         blogRepository.delete(blog);
@@ -59,12 +57,5 @@ public class BlogService {
         return blogRepository.findById(id).orElseThrow(() -> // null 체크
                 new IllegalArgumentException("선택한 메모는 존재하지 않습니다.")
         );
-    }
-
-    private void matchPassword(String password) {
-        List<Blog> blog = blogRepository.findAllByPasswordEquals(password);
-        if (blog == null) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-        }
     }
 }
