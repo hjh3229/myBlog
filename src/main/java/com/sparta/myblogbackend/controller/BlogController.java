@@ -2,13 +2,16 @@ package com.sparta.myblogbackend.controller;
 
 import com.sparta.myblogbackend.dto.BlogRequestDto;
 import com.sparta.myblogbackend.dto.BlogResponseDto;
+import com.sparta.myblogbackend.dto.UpdateBlogRequestDto;
 import com.sparta.myblogbackend.jwt.JwtUtil;
+import com.sparta.myblogbackend.security.UserDetailsImpl;
 import com.sparta.myblogbackend.service.BlogService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,8 +25,8 @@ public class BlogController {
     private final JwtUtil jwtUtil;
 
     @PostMapping("/blog")
-    public BlogResponseDto createBlog(@RequestBody BlogRequestDto requestDto) {
-        return blogService.createBlog(requestDto);
+    public BlogResponseDto createBlog(@RequestBody BlogRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return blogService.createBlog(requestDto, userDetails.getUser());
     }
 
     @GetMapping("/blog")
@@ -38,7 +41,7 @@ public class BlogController {
 
     @PutMapping("/blog")
     @ResponseBody
-    public String updateBlog(@RequestParam Long id, @RequestBody BlogRequestDto requestDto) {
+    public BlogResponseDto updateBlog(@RequestParam Long id, @RequestBody UpdateBlogRequestDto requestDto) {
         return blogService.updateBlog(id, requestDto);
     }
 

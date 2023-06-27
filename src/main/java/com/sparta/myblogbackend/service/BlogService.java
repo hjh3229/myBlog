@@ -2,7 +2,9 @@ package com.sparta.myblogbackend.service;
 
 import com.sparta.myblogbackend.dto.BlogRequestDto;
 import com.sparta.myblogbackend.dto.BlogResponseDto;
+import com.sparta.myblogbackend.dto.UpdateBlogRequestDto;
 import com.sparta.myblogbackend.entity.Blog;
+import com.sparta.myblogbackend.entity.User;
 import com.sparta.myblogbackend.repository.BlogRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,14 +19,10 @@ public class BlogService {
         this.blogRepository = blogRepository;
     }
 
-    public BlogResponseDto createBlog(BlogRequestDto requestDto) {
-        Blog blog =new Blog(requestDto);
+    public BlogResponseDto createBlog(BlogRequestDto requestDto, User user) {
+        Blog blog= blogRepository.save(new Blog(requestDto, user));
 
-        Blog saveBlog = blogRepository.save(blog);
-
-        BlogResponseDto blogResponseDto = new BlogResponseDto(saveBlog);
-
-        return blogResponseDto;
+        return new BlogResponseDto(blog);
     }
 
     public List<BlogResponseDto> getBlogs() {
@@ -36,13 +34,10 @@ public class BlogService {
     }
 
     @Transactional
-    public String updateBlog(Long id, BlogRequestDto requestDto) {
-        findBlog(id);
-
-        Blog blog = new Blog(requestDto);
-
-        String updatedContents = blog.getContents();
-        return updatedContents;
+    public BlogResponseDto updateBlog(Long id, UpdateBlogRequestDto requestDto) {
+        Blog blog = findBlog(id);
+        blog.update(requestDto);
+        return new BlogResponseDto(blog);
     }
 
 

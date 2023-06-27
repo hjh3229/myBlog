@@ -1,6 +1,7 @@
 package com.sparta.myblogbackend.entity;
 
 import com.sparta.myblogbackend.dto.BlogRequestDto;
+import com.sparta.myblogbackend.dto.UpdateBlogRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,8 +25,14 @@ public class Blog extends Timestamped {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Blog(BlogRequestDto requestDto) {
+    public Blog(BlogRequestDto requestDto, User user) {
         this.title = requestDto.getTitle();
+        this.contents = requestDto.getContents();
+        this.user = user;
+    }
+
+    public void update(UpdateBlogRequestDto requestDto) {
+        this.title =requestDto.getTitle();
         this.contents = requestDto.getContents();
     }
 }
