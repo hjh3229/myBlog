@@ -14,6 +14,10 @@ User
 https://documenter.getpostman.com/view/27923993/2s93z59jWR
 
 
+Comments
+https://documenter.getpostman.com/view/27923993/2s93z893zx
+
+
 ERD
 
 ![화면 캡처 2023-06-27 152048](https://github.com/hjh3229/myBlog/assets/110877415/a2fdfc4a-3892-49cf-b9c0-d713490e061b)
