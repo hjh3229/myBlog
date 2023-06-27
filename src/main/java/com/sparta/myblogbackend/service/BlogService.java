@@ -37,9 +37,9 @@ public class BlogService {
 
     @Transactional
     public String updateBlog(Long id, BlogRequestDto requestDto) {
-        Blog blog = findBlog(id);
+        findBlog(id);
 
-        blog.update(requestDto);
+        Blog blog = new Blog(requestDto);
 
         String updatedContents = blog.getContents();
         return updatedContents;

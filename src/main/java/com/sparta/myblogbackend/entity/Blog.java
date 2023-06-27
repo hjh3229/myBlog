@@ -17,23 +17,15 @@ public class Blog extends Timestamped {
     private Long id;
     @Column(name = "title", nullable = false)
     private String title;
-    @Column(name = "username", nullable = false)
-    private String username;
     @Column(name = "contents", nullable = false, length = 500)
     private String contents;
-    @Column(name = "password", nullable = false)
-    private String password;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     public Blog(BlogRequestDto requestDto) {
         this.title = requestDto.getTitle();
-        this.username = requestDto.getUsername();
-        this.contents = requestDto.getContents();
-        this.password = requestDto.getPassword();
-    }
-
-    public void update(BlogRequestDto requestDto) {
-        this.title = requestDto.getTitle();
-        this.username = requestDto.getUsername();
         this.contents = requestDto.getContents();
     }
 }
