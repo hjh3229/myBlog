@@ -1,5 +1,6 @@
 package com.sparta.myblogbackend.entity;
 
+import com.sparta.myblogbackend.dto.CommentRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Table(name = "comment")
-public class Comment {
+public class Comment extends Timestamped{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,7 +27,12 @@ public class Comment {
     @JoinColumn(name = "blog_id", nullable = false)
     private Blog blog;
 
-    public Comment(String comments) {
-        this.comments = comments;
+    public Comment(CommentRequestDto requestDto, User user) {
+        this.comments = requestDto.getComments();
+        this.user = user;
+    }
+
+    public void update(CommentRequestDto requestDto) {
+        this.comments = requestDto.getComments();
     }
 }

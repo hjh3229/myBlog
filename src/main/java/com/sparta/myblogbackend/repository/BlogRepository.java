@@ -10,5 +10,4 @@ import java.util.List;
 public interface BlogRepository extends JpaRepository<Blog, Long> {
     List<Blog> findAllByOrderByModifiedAtDesc();
     List<Blog> findAllByContentsContainingOrderByModifiedAtDesc(String keyword);
-    List<Blog> findAllByPasswordEquals(String password);
 }

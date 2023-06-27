@@ -40,7 +40,6 @@ public class BlogController {
     }
 
     @PutMapping("/blog")
-    @ResponseBody
     public BlogResponseDto updateBlog(@RequestParam Long id, @RequestBody UpdateBlogRequestDto requestDto) {
         return blogService.updateBlog(id, requestDto);
     }
@@ -48,6 +47,6 @@ public class BlogController {
     @DeleteMapping("/blog")
     public ResponseEntity<String> deleteBlog(@RequestParam Long id) {
         blogService.deleteBlog(id);
-        return ResponseEntity.status(HttpStatus.OK).body("삭제 성공");
+        return ResponseEntity.status(HttpStatus.OK).body("글 삭제 성공");
     }
 }
