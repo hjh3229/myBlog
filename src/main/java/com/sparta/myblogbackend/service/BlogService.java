@@ -50,7 +50,7 @@ public class BlogService {
 
     private Blog findBlog(Long id) {
         return blogRepository.findById(id).orElseThrow(() -> // null 체크
-                new IllegalArgumentException("선택한 메모는 존재하지 않습니다.")
+                new IllegalArgumentException("선택한 글는 존재하지 않습니다.")
         );
     }
 }

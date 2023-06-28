@@ -6,9 +6,7 @@ import com.sparta.myblogbackend.dto.UpdateBlogRequestDto;
 import com.sparta.myblogbackend.jwt.JwtUtil;
 import com.sparta.myblogbackend.security.UserDetailsImpl;
 import com.sparta.myblogbackend.service.BlogService;
-import io.jsonwebtoken.Claims;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,20 +14,22 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api")
 public class BlogController {
     private BlogService blogService;
 
-    private final JwtUtil jwtUtil;
+    public BlogController(BlogService blogService) {
+        this.blogService = blogService;
+    }
 
     @PostMapping("/blog")
     public BlogResponseDto createBlog(@RequestBody BlogRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return blogService.createBlog(requestDto, userDetails.getUser());
     }
 
-    @GetMapping("/blog")
+    @GetMapping("/blogs")
     public List<BlogResponseDto> getBlogs() {
         return blogService.getBlogs();
     }
