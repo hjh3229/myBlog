@@ -22,7 +22,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping("/comment")
+    @PostMapping("/comments")
     public CommentResponseDto createComment(@RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Long blog_id = requestDto.getBlog_id();
         return commentService.createComment(requestDto, userDetails.getUser(), blog_id);
