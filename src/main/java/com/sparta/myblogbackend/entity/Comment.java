@@ -26,7 +26,7 @@ public class Comment extends Timestamped{
     private User user;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "blog_id", nullable = false)
     private Blog blog;
 
