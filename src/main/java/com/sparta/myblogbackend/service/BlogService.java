@@ -4,19 +4,24 @@ import com.sparta.myblogbackend.dto.BlogRequestDto;
 import com.sparta.myblogbackend.dto.BlogResponseDto;
 import com.sparta.myblogbackend.dto.UpdateBlogRequestDto;
 import com.sparta.myblogbackend.entity.Blog;
+import com.sparta.myblogbackend.entity.Comment;
 import com.sparta.myblogbackend.entity.User;
 import com.sparta.myblogbackend.repository.BlogRepository;
+import com.sparta.myblogbackend.repository.CommentRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class BlogService {
     private final BlogRepository blogRepository;
+    private final CommentRepository commentRepository;
 
-    public BlogService(BlogRepository blogRepository) {
+    public BlogService(BlogRepository blogRepository, CommentRepository commentRepository) {
         this.blogRepository = blogRepository;
+        this.commentRepository = commentRepository;
     }
 
     public BlogResponseDto createBlog(BlogRequestDto requestDto, User user) {
@@ -27,18 +32,31 @@ public class BlogService {
 
     @Transactional(readOnly = true)
     public List<BlogResponseDto> getBlogs() {
-        return blogRepository.findAllByOrderByModifiedAtDesc().stream().map(BlogResponseDto::new).toList();
+        List<BlogResponseDto> responseDtos = new ArrayList<>();
+        List<Blog> blogs = blogRepository.findAllByOrderByModifiedAtDesc();
+        for (Blog blog : blogs) {
+            List<Comment> comments = getCommentsInBlog(blog);
+            responseDtos.add(new BlogResponseDto(blog));
+        }
+        return responseDtos;
     }
 
     @Transactional(readOnly = true)
     public List<BlogResponseDto> getBlogsByKeyword(String keyword) {
-        return blogRepository.findAllByContentsContainingOrderByModifiedAtDesc(keyword).stream().map(BlogResponseDto::new).toList();
+        List<BlogResponseDto> responseDtos = new ArrayList<>();
+        List<Blog> blogs = blogRepository.findAllByContentsContainingOrderByModifiedAtDesc(keyword);
+        for (Blog blog : blogs) {
+            List<Comment> comments = getCommentsInBlog(blog);
+            responseDtos.add(new BlogResponseDto(blog));
+        }
+        return responseDtos;
     }
 
     @Transactional
     public BlogResponseDto updateBlog(Long id, UpdateBlogRequestDto requestDto) {
         Blog blog = findBlog(id);
         blog.update(requestDto);
+        List<Comment> comments = getCommentsInBlog(blog);
         return new BlogResponseDto(blog);
     }
 
@@ -47,6 +65,10 @@ public class BlogService {
         Blog blog = findBlog(id);
 
         blogRepository.delete(blog);
+    }
+
+    private List<Comment> getCommentsInBlog(Blog blog) {
+        return commentRepository.findAllByIdOrderByModifiedAtDesc(blog.getId());
     }
 
 

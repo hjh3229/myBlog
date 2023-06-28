@@ -1,9 +1,11 @@
 package com.sparta.myblogbackend.dto;
 
 import com.sparta.myblogbackend.entity.Blog;
+import com.sparta.myblogbackend.entity.Comment;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 public class BlogResponseDto {
@@ -11,6 +13,7 @@ public class BlogResponseDto {
     private String username;
     private String title;
     private String contents;
+    private List<Comment> comments;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
@@ -19,6 +22,7 @@ public class BlogResponseDto {
         this.username = blog.getUsername();
         this.title = blog.getTitle();
         this.contents = blog.getContents();
+        this.comments = blog.getComments();
         this.createdAt = blog.getCreatedAt();
         this.modifiedAt = blog.getModifiedAt();
     }
