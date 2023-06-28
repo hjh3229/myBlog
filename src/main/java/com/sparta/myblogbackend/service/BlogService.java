@@ -25,10 +25,12 @@ public class BlogService {
         return new BlogResponseDto(blog);
     }
 
+    @Transactional(readOnly = true)
     public List<BlogResponseDto> getBlogs() {
         return blogRepository.findAllByOrderByModifiedAtDesc().stream().map(BlogResponseDto::new).toList();
     }
 
+    @Transactional(readOnly = true)
     public List<BlogResponseDto> getBlogsByKeyword(String keyword) {
         return blogRepository.findAllByContentsContainingOrderByModifiedAtDesc(keyword).stream().map(BlogResponseDto::new).toList();
     }
