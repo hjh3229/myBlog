@@ -33,11 +33,6 @@ public class CommentService {
             return new CommentResponseDto(comment);
     }
 
-//    @Transactional(readOnly = true)
-//    public List<CommentResponseDto> getComments() {
-//        return commentRepository.findAllByOrderByModifiedAtDesc().stream().map(CommentResponseDto::new).toList();
-//    }
-
     @Transactional
     public CommentResponseDto updateComment(Long id, CommentRequestDto requestDto) {
         Comment comment = findComment(id);

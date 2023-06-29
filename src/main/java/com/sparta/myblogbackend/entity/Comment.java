@@ -1,5 +1,6 @@
 package com.sparta.myblogbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sparta.myblogbackend.dto.CommentRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
