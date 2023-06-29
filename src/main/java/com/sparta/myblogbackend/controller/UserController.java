@@ -31,7 +31,7 @@ public class UserController {
     @GetMapping("/user/login-page")
     @ResponseBody
     public String loginPage() {
-        return "login";
+        return "회원가입 성공";
     }
 
     @GetMapping("/user/sign-up")
@@ -50,6 +50,7 @@ public class UserController {
             }
             return "redirect:/api/user/sign-up";
         }
+
 
         userService.signup(requestDto);
 

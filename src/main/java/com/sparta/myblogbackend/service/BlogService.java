@@ -53,7 +53,6 @@ public class BlogService {
 
     public void deleteBlog(Long id) {
         Blog blog = findBlog(id);
-        System.out.println(blog.getComments());
 
         blogRepository.delete(blog);
     }
