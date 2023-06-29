@@ -5,6 +5,7 @@ import com.sparta.myblogbackend.entity.Comment;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -13,7 +14,7 @@ public class BlogResponseDto {
     private String username;
     private String title;
     private String contents;
-    private List<Comment> comments;
+    private List<CommentResponseDto> commentList;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
@@ -22,7 +23,11 @@ public class BlogResponseDto {
         this.username = blog.getUsername();
         this.title = blog.getTitle();
         this.contents = blog.getContents();
-        this.comments = blog.getComments();
+        this.commentList = new ArrayList<>();
+        for (Comment comment : blog.getComments()) {
+            CommentResponseDto commentResponseDto = new CommentResponseDto(comment);
+            this.commentList.add(commentResponseDto);
+        }
         this.createdAt = blog.getCreatedAt();
         this.modifiedAt = blog.getModifiedAt();
     }

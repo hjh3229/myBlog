@@ -63,8 +63,7 @@ public class WebSecurityConfig {
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
                         .requestMatchers("/api/user/**").permitAll() // '/api/user/'로 시작하는 요청 모두 접근 허가
                         .requestMatchers("/api/blogs").permitAll() // 모든 글 조회 허가
-                        .requestMatchers("/api/comments").permitAll() // 모든 댓글 조회 허가
-                        .requestMatchers("/api/comment/create").permitAll() // 모든 댓글 입력 허가
+                        .requestMatchers("/api/comments").permitAll() // 모든 댓글 입력 허가
                         .anyRequest().authenticated() // 그 외 모든 요청 인증처리
         );
 

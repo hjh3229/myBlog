@@ -28,11 +28,6 @@ public class CommentController {
         return commentService.createComment(requestDto, userDetails.getUser(), blog_id);
     }
 
-//    @GetMapping("/comments")
-//    public List<CommentResponseDto> getComments() {
-//        return commentService.getComments();
-//    }
-
     @PutMapping("/comment")
     @ResponseBody
     public CommentResponseDto updateComment(@RequestParam Long id, @RequestBody CommentRequestDto requestDto) {

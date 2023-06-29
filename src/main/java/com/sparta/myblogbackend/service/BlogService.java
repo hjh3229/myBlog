@@ -32,45 +32,31 @@ public class BlogService {
 
     @Transactional(readOnly = true)
     public List<BlogResponseDto> getBlogs() {
-        List<BlogResponseDto> responseDtos = new ArrayList<>();
-        List<Blog> blogs = blogRepository.findAllByOrderByModifiedAtDesc();
-        for (Blog blog : blogs) {
-            List<Comment> comments = getCommentsInBlog(blog);
-            responseDtos.add(new BlogResponseDto(blog));
-        }
-        return responseDtos;
+        return blogRepository.findAllByOrderByModifiedAtDesc().stream().map(BlogResponseDto::new).toList();
     }
 
     @Transactional(readOnly = true)
     public List<BlogResponseDto> getBlogsByKeyword(String keyword) {
-        List<BlogResponseDto> responseDtos = new ArrayList<>();
-        List<Blog> blogs = blogRepository.findAllByContentsContainingOrderByModifiedAtDesc(keyword);
-        for (Blog blog : blogs) {
-            List<Comment> comments = getCommentsInBlog(blog);
-            responseDtos.add(new BlogResponseDto(blog));
+        if (keyword == null) {
+            throw new RuntimeException("키워드를 입력해주세요");
         }
-        return responseDtos;
+        return blogRepository.findAllByContentsContainingOrderByModifiedAtDesc(keyword).stream().map(BlogResponseDto::new).toList();
     }
 
     @Transactional
     public BlogResponseDto updateBlog(Long id, UpdateBlogRequestDto requestDto) {
         Blog blog = findBlog(id);
         blog.update(requestDto);
-        List<Comment> comments = getCommentsInBlog(blog);
         return new BlogResponseDto(blog);
     }
 
 
     public void deleteBlog(Long id) {
         Blog blog = findBlog(id);
+        System.out.println(blog.getComments());
 
         blogRepository.delete(blog);
     }
-
-    private List<Comment> getCommentsInBlog(Blog blog) {
-        return commentRepository.findAllByIdOrderByModifiedAtDesc(blog.getId());
-    }
-
 
     private Blog findBlog(Long id) {
         return blogRepository.findById(id).orElseThrow(() -> // null 체크

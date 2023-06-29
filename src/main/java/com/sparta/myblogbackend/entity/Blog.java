@@ -1,5 +1,6 @@
 package com.sparta.myblogbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sparta.myblogbackend.dto.BlogRequestDto;
 import com.sparta.myblogbackend.dto.UpdateBlogRequestDto;
 import jakarta.persistence.*;
@@ -31,7 +32,7 @@ public class Blog extends Timestamped {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
 
