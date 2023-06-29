@@ -20,4 +20,4 @@ https://documenter.getpostman.com/view/27923993/2s93z893zx
 
 ERD
 
-![erd](https://github.com/hjh3229/myBlog/assets/110877415/b91ba024-857e-4a29-8c88-a9c529e83820)
+![화면 캡처 2023-06-27 151753](https://github.com/hjh3229/myBlog/assets/110877415/31e15263-874e-47fd-890e-8f4be2433730)
