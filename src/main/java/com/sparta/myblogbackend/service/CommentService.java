@@ -26,7 +26,7 @@ public class CommentService {
 
     public CommentResponseDto createComment(CommentRequestDto requestDto, User user, Long blog_id) {
             Blog blog = blogRepository.findById(blog_id).orElseThrow(() ->
-                    new RuntimeException("해당 글을 찾을 수 없습니다.")
+                    new IllegalArgumentException("해당 글을 찾을 수 없습니다.")
             );
             Comment comment = commentRepository.save(new Comment(requestDto, user, blog));
 
