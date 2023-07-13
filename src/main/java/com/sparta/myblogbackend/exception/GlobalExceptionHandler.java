@@ -1,9 +1,12 @@
 package com.sparta.myblogbackend.exception;
 
+import jakarta.servlet.ServletException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.io.IOException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -30,8 +33,8 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler({RuntimeException.class})
-    public ResponseEntity<RestApiException> runtimeExceptionHandler(RuntimeException ex) {
+    @ExceptionHandler({RuntimeException.class, IOException.class, ServletException.class})
+    public ResponseEntity<RestApiException> UnauthorizedExceptionHandler(Exception ex) {
         RestApiException restApiException = new RestApiException(ex.getMessage(), HttpStatus.UNAUTHORIZED.value());
         return new ResponseEntity<>(
                 restApiException,
