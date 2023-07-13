@@ -23,20 +23,19 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/comments")
-    public CommentResponseDto createComment(@RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        Long blog_id = requestDto.getBlog_id();
+    public CommentResponseDto createComment(@RequestParam Long blog_id, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return commentService.createComment(requestDto, userDetails.getUser(), blog_id);
     }
 
     @PutMapping("/comment")
     @ResponseBody
-    public CommentResponseDto updateComment(@RequestParam Long id, @RequestBody CommentRequestDto requestDto) {
-        return commentService.updateComment(id, requestDto);
+    public CommentResponseDto updateComment(@RequestParam Long id, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.updateComment(id, requestDto, userDetails.getUser());
     }
 
     @DeleteMapping("/comment")
-    public ResponseEntity<String> deleteComment(@RequestParam Long id) {
-        commentService.deleteComment(id);
+    public ResponseEntity<String> deleteComment(@RequestParam Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        commentService.deleteComment(id, userDetails.getUser());
         return ResponseEntity.status(HttpStatus.OK).body("댓글 삭제 성공");
     }
 }

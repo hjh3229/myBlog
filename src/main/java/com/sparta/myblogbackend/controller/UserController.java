@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("/api")
 public class UserController {
 
@@ -26,18 +26,6 @@ public class UserController {
 
     public UserController(UserService userService) {
         this.userService = userService;
-    }
-
-    @GetMapping("/user/login-page")
-    @ResponseBody
-    public String loginPage() {
-        return "회원가입 성공";
-    }
-
-    @GetMapping("/user/sign-up")
-    @ResponseBody
-    public String signupPage() {
-        return "signup";
     }
 
     @PostMapping("/user/sign-up")
@@ -48,13 +36,13 @@ public class UserController {
             for (FieldError fieldError : bindingResult.getFieldErrors()) {
                 log.error(fieldError.getField() + " 필드 : " + fieldError.getDefaultMessage());
             }
-            return "redirect:/api/user/sign-up";
+            return "회원가입 실패";
         }
 
 
         userService.signup(requestDto);
 
-        return "redirect:/api/user/login-page";
+        return "회원가입 성공";
     }
 
     @GetMapping("/user-info")

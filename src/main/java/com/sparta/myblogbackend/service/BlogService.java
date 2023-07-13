@@ -44,17 +44,24 @@ public class BlogService {
     }
 
     @Transactional
-    public BlogResponseDto updateBlog(Long id, UpdateBlogRequestDto requestDto) {
+    public BlogResponseDto updateBlog(Long id, UpdateBlogRequestDto requestDto, User user) {
         Blog blog = findBlog(id);
-        blog.update(requestDto);
+        if (blog.getUsername().equals(user.getUsername())) {
+            blog.update(requestDto);
+        } else {
+            throw new RuntimeException("권한이 없습니다.");
+        }
         return new BlogResponseDto(blog);
     }
 
 
-    public void deleteBlog(Long id) {
+    public void deleteBlog(Long id, User user) {
         Blog blog = findBlog(id);
-
-        blogRepository.delete(blog);
+        if (blog.getUsername().equals(user.getUsername())) {
+            blogRepository.delete(blog);
+        } else {
+            throw new RuntimeException("권한이 없습니다.");
+        }
     }
 
     private Blog findBlog(Long id) {

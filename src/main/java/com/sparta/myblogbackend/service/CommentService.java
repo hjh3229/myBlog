@@ -34,16 +34,24 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentResponseDto updateComment(Long id, CommentRequestDto requestDto) {
+    public CommentResponseDto updateComment(Long id, CommentRequestDto requestDto, User user) {
         Comment comment = findComment(id);
-        comment.update(requestDto);
+        if (comment.getUsername().equals(user.getUsername())) {
+            comment.update(requestDto);
+        } else {
+            throw new RuntimeException("권한이 없습니다.");
+        }
+
         return new CommentResponseDto(comment);
     }
 
-    public void deleteComment(Long id) {
+    public void deleteComment(Long id, User user) {
         Comment comment = findComment(id);
-
-        commentRepository.delete(comment);
+        if (comment.getUsername().equals(user.getUsername())) {
+            commentRepository.delete(comment);
+        } else {
+            throw new RuntimeException("권한이 없습니다.");
+        }
     }
 
     private Comment findComment(Long id) {

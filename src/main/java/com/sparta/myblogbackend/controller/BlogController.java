@@ -3,6 +3,7 @@ package com.sparta.myblogbackend.controller;
 import com.sparta.myblogbackend.dto.BlogRequestDto;
 import com.sparta.myblogbackend.dto.BlogResponseDto;
 import com.sparta.myblogbackend.dto.UpdateBlogRequestDto;
+import com.sparta.myblogbackend.entity.User;
 import com.sparta.myblogbackend.jwt.JwtUtil;
 import com.sparta.myblogbackend.security.UserDetailsImpl;
 import com.sparta.myblogbackend.service.BlogService;
@@ -34,19 +35,19 @@ public class BlogController {
         return blogService.getBlogs();
     }
 
-    @GetMapping("/blog/find")
+    @GetMapping("/blogs/find")
     public List<BlogResponseDto> getBlogsByKeyword(@RequestParam String keyword) {
         return blogService.getBlogsByKeyword(keyword);
     }
 
     @PutMapping("/blog")
-    public BlogResponseDto updateBlog(@RequestParam Long id, @RequestBody UpdateBlogRequestDto requestDto) {
-        return blogService.updateBlog(id, requestDto);
+    public BlogResponseDto updateBlog(@RequestParam Long id, @RequestBody UpdateBlogRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return blogService.updateBlog(id, requestDto, userDetails.getUser());
     }
 
     @DeleteMapping("/blog")
-    public ResponseEntity<String> deleteBlog(@RequestParam Long id) {
-        blogService.deleteBlog(id);
+    public ResponseEntity<String> deleteBlog(@RequestParam Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        blogService.deleteBlog(id, userDetails.getUser());
         return ResponseEntity.status(HttpStatus.OK).body("글 삭제 성공");
     }
 }
