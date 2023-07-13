@@ -51,7 +51,7 @@ public class BlogService {
         if (blog.getUsername().equals(user.getUsername())) {
             blog.update(requestDto);
         } else {
-            throw new RuntimeException("권한이 없습니다.");
+            throw new RuntimeException("작성자만 삭제/수정할 수 있습니다.");
         }
         return new BlogResponseDto(blog);
     }
@@ -62,7 +62,7 @@ public class BlogService {
         if (blog.getUsername().equals(user.getUsername())) {
             blogRepository.delete(blog);
         } else {
-            throw new RuntimeException("권한이 없습니다.");
+            throw new RuntimeException("작성자만 삭제/수정할 수 있습니다.");
         }
     }
 
@@ -79,7 +79,9 @@ public class BlogService {
     }
 
     @Transactional
-    public void like(Long blogId, Long userId) {
+    public String like(Long blogId, Long userId) {
+        final String[] msg = {""};
+
         Blog blog = findBlog(blogId);
         User user = findUser(userId);
 
@@ -90,6 +92,7 @@ public class BlogService {
                     blogLikeRepository.delete(like);
                     blog.subLikeCount(like);
                     blog.updateLikeCount();
+                    msg[0] = "좋아요 취소";
                 },
                 () -> {
                     BlogLike blogLike = new BlogLike(user, blog);
@@ -99,8 +102,10 @@ public class BlogService {
                     blog.updateLikeCount();
 
                     blogLikeRepository.save(blogLike);
+                    msg[0] = "좋아요";
                 }
         );
+        return msg[0];
     }
 
     public boolean isLiked(Long blogId, Long userId) {

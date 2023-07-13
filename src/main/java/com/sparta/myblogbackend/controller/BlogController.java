@@ -50,8 +50,8 @@ public class BlogController {
     }
 
     @PostMapping("/blog/like")
-    public void like(@RequestParam Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        blogService.like(id, userDetails.getUser().getId());
+    public String like(@RequestParam Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return blogService.like(id, userDetails.getUser().getId());
     }
 
     @GetMapping("/blog/like")

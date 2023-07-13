@@ -39,7 +39,7 @@ public class CommentService {
         if (comment.getUsername().equals(user.getUsername())) {
             comment.update(requestDto);
         } else {
-            throw new RuntimeException("권한이 없습니다.");
+            throw new RuntimeException("작성자만 삭제/수정할 수 있습니다.");
         }
 
         return new CommentResponseDto(comment);
@@ -50,7 +50,7 @@ public class CommentService {
         if (comment.getUsername().equals(user.getUsername())) {
             commentRepository.delete(comment);
         } else {
-            throw new RuntimeException("권한이 없습니다.");
+            throw new RuntimeException("작성자만 삭제/수정할 수 있습니다.");
         }
     }
 
