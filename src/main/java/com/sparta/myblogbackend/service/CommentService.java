@@ -2,26 +2,26 @@ package com.sparta.myblogbackend.service;
 
 import com.sparta.myblogbackend.dto.CommentRequestDto;
 import com.sparta.myblogbackend.dto.CommentResponseDto;
-import com.sparta.myblogbackend.entity.Blog;
-import com.sparta.myblogbackend.entity.Comment;
-import com.sparta.myblogbackend.entity.User;
+import com.sparta.myblogbackend.entity.*;
 import com.sparta.myblogbackend.repository.BlogRepository;
+import com.sparta.myblogbackend.repository.CommentLikeRepository;
 import com.sparta.myblogbackend.repository.CommentRepository;
+import com.sparta.myblogbackend.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
+@RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
     private final BlogRepository blogRepository;
-
-    public CommentService(CommentRepository commentRepository, BlogRepository blogRepository) {
-        this.commentRepository = commentRepository;
-        this.blogRepository = blogRepository;
-    }
+    private final CommentLikeRepository commentLikeRepository;
+    private final UserRepository userRepository;
 
 
     public CommentResponseDto createComment(CommentRequestDto requestDto, User user, Long blog_id) {
@@ -58,5 +58,42 @@ public class CommentService {
         return commentRepository.findById(id).orElseThrow(() -> // null 체크
                 new IllegalArgumentException("선택한 글은 존재하지 않습니다.")
         );
+    }
+
+    private User findUser(Long id) {
+        return userRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("존재하지 않는 유저입니다.")
+        );
+    }
+
+    public void like(Long commentId, Long userId) {
+        Comment comment = findComment(commentId);
+        User user = findUser(userId);
+        Optional<CommentLike> isLike = commentLikeRepository.findByUserAndComment(user, comment);
+
+        isLike.ifPresentOrElse(
+                like -> {
+                    commentLikeRepository.delete(like);
+                    comment.subLikeCount(like);
+                    comment.updateLikeCount();
+                },
+                () -> {
+                    CommentLike commentLike = new CommentLike(user, comment);
+
+                    commentLike.mappingComment(comment);
+                    commentLike.mappingUser(user);
+                    comment.updateLikeCount();
+
+                    commentLikeRepository.save(commentLike);
+                }
+        );
+    }
+
+    public boolean isLiked(Long commentId, Long userId) {
+        Comment comment = findComment(commentId);
+        User user = userRepository.findById(userId).orElse(new User());
+        Optional<CommentLike> isLike = commentLikeRepository.findByUserAndComment(user, comment);
+        boolean isLiked = CommentLike.isLikedComment(isLike);
+        return isLiked;
     }
 }

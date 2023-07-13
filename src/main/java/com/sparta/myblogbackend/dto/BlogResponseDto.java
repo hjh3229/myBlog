@@ -17,6 +17,7 @@ public class BlogResponseDto {
     private List<CommentResponseDto> commentList;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
+    private int likeCounts;
 
     public BlogResponseDto(Blog blog) {
         this.id = blog.getId();
@@ -30,5 +31,6 @@ public class BlogResponseDto {
         }
         this.createdAt = blog.getCreatedAt();
         this.modifiedAt = blog.getModifiedAt();
+        this.likeCounts = blog.getBlogLikeList().size();
     }
 }

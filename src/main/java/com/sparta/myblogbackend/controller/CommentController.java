@@ -38,4 +38,14 @@ public class CommentController {
         commentService.deleteComment(id, userDetails.getUser());
         return ResponseEntity.status(HttpStatus.OK).body("댓글 삭제 성공");
     }
+
+    @PostMapping("/comment/like")
+    public void like(@RequestParam Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        commentService.like(id, userDetails.getUser().getId());
+    }
+
+    @GetMapping("/comment/like")
+    public boolean isLiked(@RequestParam Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.isLiked(id, userDetails.getUser().getId());
+    }
 }

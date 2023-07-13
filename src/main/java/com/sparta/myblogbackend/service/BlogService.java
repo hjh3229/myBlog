@@ -4,25 +4,27 @@ import com.sparta.myblogbackend.dto.BlogRequestDto;
 import com.sparta.myblogbackend.dto.BlogResponseDto;
 import com.sparta.myblogbackend.dto.UpdateBlogRequestDto;
 import com.sparta.myblogbackend.entity.Blog;
+import com.sparta.myblogbackend.entity.BlogLike;
 import com.sparta.myblogbackend.entity.Comment;
 import com.sparta.myblogbackend.entity.User;
+import com.sparta.myblogbackend.repository.BlogLikeRepository;
 import com.sparta.myblogbackend.repository.BlogRepository;
 import com.sparta.myblogbackend.repository.CommentRepository;
+import com.sparta.myblogbackend.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class BlogService {
     private final BlogRepository blogRepository;
-    private final CommentRepository commentRepository;
-
-    public BlogService(BlogRepository blogRepository, CommentRepository commentRepository) {
-        this.blogRepository = blogRepository;
-        this.commentRepository = commentRepository;
-    }
+    private final BlogLikeRepository blogLikeRepository;
+    private final UserRepository userRepository;
 
     public BlogResponseDto createBlog(BlogRequestDto requestDto, User user) {
         Blog blog= blogRepository.save(new Blog(requestDto, user));
@@ -68,5 +70,44 @@ public class BlogService {
         return blogRepository.findById(id).orElseThrow(() -> // null 체크
                 new IllegalArgumentException("선택한 글는 존재하지 않습니다.")
         );
+    }
+
+    private User findUser(Long id) {
+        return userRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("존재하지 않는 유저입니다.")
+        );
+    }
+
+    @Transactional
+    public void like(Long blogId, Long userId) {
+        Blog blog = findBlog(blogId);
+        User user = findUser(userId);
+
+        Optional<BlogLike> isLike = blogLikeRepository.findByUserAndBlog(user, blog);
+
+        isLike.ifPresentOrElse(
+                like -> {
+                    blogLikeRepository.delete(like);
+                    blog.subLikeCount(like);
+                    blog.updateLikeCount();
+                },
+                () -> {
+                    BlogLike blogLike = new BlogLike(user, blog);
+
+                    blogLike.mappingBlog(blog);
+                    blogLike.mappingUser(user);
+                    blog.updateLikeCount();
+
+                    blogLikeRepository.save(blogLike);
+                }
+        );
+    }
+
+    public boolean isLiked(Long blogId, Long userId) {
+        Blog blog = findBlog(blogId);
+        User user = userRepository.findById(userId).orElse(new User());
+        Optional<BlogLike> isLike = blogLikeRepository.findByUserAndBlog(user, blog);
+        boolean isLiked = BlogLike.isLikedBlog(isLike);
+        return isLiked;
     }
 }

@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -21,6 +24,11 @@ public class Comment extends Timestamped{
     private String comments;
     @JoinColumn(nullable = false)
     private String username;
+    @Column
+    private Long likeCount;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "comment", cascade = CascadeType.REMOVE)
+    private List<CommentLike> commentLikeList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -36,9 +44,22 @@ public class Comment extends Timestamped{
         this.username = user.getUsername();
         this.user = user;
         this.blog = blog;
+        this.likeCount = 0L;
     }
 
     public void update(CommentRequestDto requestDto) {
         this.comments = requestDto.getComments();
+    }
+
+    public void mappingCommentLike(CommentLike commentLike) { // 좋아요 수를 세기 위해 추가
+        this.commentLikeList.add(commentLike);
+    }
+
+    public void updateLikeCount() { // 피드 내 좋아요 수 확인은 따로 변수를 생성하지 않고 목록의 크기로 확인
+        this.likeCount = (long)this.commentLikeList.size();
+    }
+
+    public void subLikeCount(CommentLike commentLike) { // 좋아요 목록에서 삭제
+        this.commentLikeList.remove(commentLike);
     }
 }
