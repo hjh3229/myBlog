@@ -1,4 +1,4 @@
-package com.sparta.myblogbackend.service;
+package com.sparta.myblogbackend.service.impl;
 
 import com.sparta.myblogbackend.dto.CommentRequestDto;
 import com.sparta.myblogbackend.dto.CommentResponseDto;
@@ -10,6 +10,7 @@ import com.sparta.myblogbackend.repository.BlogRepository;
 import com.sparta.myblogbackend.repository.CommentLikeRepository;
 import com.sparta.myblogbackend.repository.CommentRepository;
 import com.sparta.myblogbackend.repository.UserRepository;
+import com.sparta.myblogbackend.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class CommentServiceImpl implements CommentService{
+public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final BlogRepository blogRepository;
     private final CommentLikeRepository commentLikeRepository;

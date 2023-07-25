@@ -1,4 +1,4 @@
-package com.sparta.myblogbackend.service;
+package com.sparta.myblogbackend.service.impl;
 
 import com.sparta.myblogbackend.dto.BlogRequestDto;
 import com.sparta.myblogbackend.dto.BlogResponseDto;
@@ -9,6 +9,7 @@ import com.sparta.myblogbackend.entity.User;
 import com.sparta.myblogbackend.repository.BlogLikeRepository;
 import com.sparta.myblogbackend.repository.BlogRepository;
 import com.sparta.myblogbackend.repository.UserRepository;
+import com.sparta.myblogbackend.service.BlogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
