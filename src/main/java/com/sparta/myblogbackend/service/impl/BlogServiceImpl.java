@@ -6,6 +6,7 @@ import com.sparta.myblogbackend.dto.UpdateBlogRequestDto;
 import com.sparta.myblogbackend.entity.Blog;
 import com.sparta.myblogbackend.entity.BlogLike;
 import com.sparta.myblogbackend.entity.User;
+import com.sparta.myblogbackend.exception.customexception.UnauthorizedException;
 import com.sparta.myblogbackend.repository.BlogLikeRepository;
 import com.sparta.myblogbackend.repository.BlogRepository;
 import com.sparta.myblogbackend.repository.UserRepository;
@@ -49,7 +50,7 @@ public class BlogServiceImpl implements BlogService {
         if (blog.getUsername().equals(user.getUsername())) {
             blog.update(requestDto);
         } else {
-            throw new RuntimeException("작성자만 삭제/수정할 수 있습니다.");
+            throw new UnauthorizedException("글은 작성자만 수정 할 수 있습니다.");
         }
         return new BlogResponseDto(blog);
     }
@@ -60,7 +61,7 @@ public class BlogServiceImpl implements BlogService {
         if (blog.getUsername().equals(user.getUsername())) {
             blogRepository.delete(blog);
         } else {
-            throw new RuntimeException("작성자만 삭제/수정할 수 있습니다.");
+            throw new UnauthorizedException("글은 작성자만 삭제 할 수 있습니다.");
         }
     }
 

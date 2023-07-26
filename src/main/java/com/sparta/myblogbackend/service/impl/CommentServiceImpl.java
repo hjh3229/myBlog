@@ -6,6 +6,7 @@ import com.sparta.myblogbackend.entity.Blog;
 import com.sparta.myblogbackend.entity.Comment;
 import com.sparta.myblogbackend.entity.CommentLike;
 import com.sparta.myblogbackend.entity.User;
+import com.sparta.myblogbackend.exception.customexception.UnauthorizedException;
 import com.sparta.myblogbackend.repository.BlogRepository;
 import com.sparta.myblogbackend.repository.CommentLikeRepository;
 import com.sparta.myblogbackend.repository.CommentRepository;
@@ -40,7 +41,7 @@ public class CommentServiceImpl implements CommentService {
         if (comment.getUsername().equals(user.getUsername())) {
             comment.update(requestDto);
         } else {
-            throw new RuntimeException("작성자만 삭제/수정할 수 있습니다.");
+            throw new UnauthorizedException("댓글은 작성자만 수정 할 수 있습니다.");
         }
 
         return new CommentResponseDto(comment);
@@ -52,7 +53,7 @@ public class CommentServiceImpl implements CommentService {
         if (comment.getUsername().equals(user.getUsername())) {
             commentRepository.delete(comment);
         } else {
-            throw new RuntimeException("작성자만 삭제/수정할 수 있습니다.");
+            throw new UnauthorizedException("작성자만 수정 할 수 있습니다.");
         }
     }
 
