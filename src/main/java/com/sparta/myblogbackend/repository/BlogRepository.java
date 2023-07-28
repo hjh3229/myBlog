@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BlogRepository extends JpaRepository<Blog, Long> {
+public interface BlogRepository extends JpaRepository<Blog, Long>, BlogRepositoryQuery {
     List<Blog> findAllByOrderByModifiedAtDesc();
     List<Blog> findAllByContentsContainingOrderByModifiedAtDesc(String keyword);
 }

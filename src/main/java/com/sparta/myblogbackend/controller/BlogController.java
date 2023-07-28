@@ -1,5 +1,6 @@
 package com.sparta.myblogbackend.controller;
 
+import com.sparta.myblogbackend.common.PageDto;
 import com.sparta.myblogbackend.dto.BlogRequestDto;
 import com.sparta.myblogbackend.dto.BlogResponseDto;
 import com.sparta.myblogbackend.dto.UpdateBlogRequestDto;
@@ -9,6 +10,7 @@ import com.sparta.myblogbackend.security.UserDetailsImpl;
 import com.sparta.myblogbackend.service.BlogService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -36,6 +38,11 @@ public class BlogController {
     @GetMapping("/blogs/find")
     public List<BlogResponseDto> getBlogsByKeyword(@RequestParam String keyword) {
         return blogService.getBlogsByKeyword(keyword);
+    }
+
+    @GetMapping("/blogs/get")
+    public Page<BlogResponseDto> getBlogByKeyword(@RequestParam String keyword, @RequestBody PageDto pageDto) {
+        return blogService.getBlogByKeyword(keyword, pageDto);
     }
 
     @PutMapping("/blog")

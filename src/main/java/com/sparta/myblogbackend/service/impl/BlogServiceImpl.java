@@ -1,5 +1,6 @@
 package com.sparta.myblogbackend.service.impl;
 
+import com.sparta.myblogbackend.common.PageDto;
 import com.sparta.myblogbackend.dto.BlogRequestDto;
 import com.sparta.myblogbackend.dto.BlogResponseDto;
 import com.sparta.myblogbackend.dto.UpdateBlogRequestDto;
@@ -12,6 +13,7 @@ import com.sparta.myblogbackend.repository.BlogRepository;
 import com.sparta.myblogbackend.repository.UserRepository;
 import com.sparta.myblogbackend.service.BlogService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,6 +44,14 @@ public class BlogServiceImpl implements BlogService {
             throw new RuntimeException("키워드를 입력해주세요");
         }
         return blogRepository.findAllByContentsContainingOrderByModifiedAtDesc(keyword).stream().map(BlogResponseDto::new).toList();
+    }
+
+    @Override
+    public Page<BlogResponseDto> getBlogByKeyword(String keyword, PageDto pageDto) {
+        if (keyword == null) {
+            throw new RuntimeException("키워드를 입력해주세요");
+        }
+        return blogRepository.findBlogsByKeyword(keyword, pageDto.toPageable(keyword));
     }
 
     @Override
