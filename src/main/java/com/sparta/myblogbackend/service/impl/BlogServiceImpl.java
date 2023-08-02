@@ -1,6 +1,7 @@
 package com.sparta.myblogbackend.service.impl;
 
 import com.sparta.myblogbackend.common.PageDto;
+import com.sparta.myblogbackend.controller.S3Uploader;
 import com.sparta.myblogbackend.dto.BlogRequestDto;
 import com.sparta.myblogbackend.dto.BlogResponseDto;
 import com.sparta.myblogbackend.dto.UpdateBlogRequestDto;
@@ -12,13 +13,19 @@ import com.sparta.myblogbackend.repository.BlogLikeRepository;
 import com.sparta.myblogbackend.repository.BlogRepository;
 import com.sparta.myblogbackend.repository.UserRepository;
 import com.sparta.myblogbackend.service.BlogService;
+import java.io.IOException;
+import java.util.concurrent.RejectedExecutionException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BlogServiceImpl implements BlogService {
@@ -26,11 +33,20 @@ public class BlogServiceImpl implements BlogService {
     private final BlogLikeRepository blogLikeRepository;
     private final UserRepository userRepository;
 
-    @Override
-    public BlogResponseDto createBlog(BlogRequestDto requestDto, User user) {
-        Blog blog= blogRepository.save(new Blog(requestDto, user));
+    @Autowired
+    private S3Uploader s3Uploader;
 
-        return new BlogResponseDto(blog);
+    @Override
+    public BlogResponseDto createBlog(BlogRequestDto requestDto, User user, MultipartFile multipartFile) throws IOException {
+        log.info("서비스에서 글 생성 시도");
+        try {
+            String storedFileName = s3Uploader.upload(multipartFile, "blog");
+            Blog blog = blogRepository.save(new Blog(requestDto, user, storedFileName));
+            log.info("서비스에서 글 생성 성공");
+            return new BlogResponseDto(blog);
+        } catch (RejectedExecutionException e) {
+            throw new RuntimeException("Fail ! 게시글 생성 실패", e);
+        }
     }
 
     @Override

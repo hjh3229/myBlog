@@ -8,6 +8,7 @@ import com.sparta.myblogbackend.entity.User;
 import com.sparta.myblogbackend.jwt.JwtUtil;
 import com.sparta.myblogbackend.security.UserDetailsImpl;
 import com.sparta.myblogbackend.service.BlogService;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RestController
@@ -26,8 +28,14 @@ public class BlogController {
     private final BlogService blogService;
 
     @PostMapping("/blog")
-    public BlogResponseDto createBlog(@RequestBody BlogRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return blogService.createBlog(requestDto, userDetails.getUser());
+    public BlogResponseDto createBlog(@RequestPart("requestDto") BlogRequestDto requestDto, @RequestPart("multipartFile") MultipartFile multipartFile, @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
+        log.info("게시글 생성 시도");
+        try {
+            log.info("게시글 생성 성공");
+            return blogService.createBlog(requestDto, userDetails.getUser(), multipartFile);
+        } catch (Exception e) {
+            throw new RuntimeException("게시글 작성 실패");
+        }
     }
 
     @GetMapping("/blogs")

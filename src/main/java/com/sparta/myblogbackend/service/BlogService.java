@@ -5,15 +5,18 @@ import com.sparta.myblogbackend.dto.BlogRequestDto;
 import com.sparta.myblogbackend.dto.BlogResponseDto;
 import com.sparta.myblogbackend.dto.UpdateBlogRequestDto;
 import com.sparta.myblogbackend.entity.User;
+import java.io.IOException;
 import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 
 public interface BlogService {
 
-    BlogResponseDto createBlog(BlogRequestDto requestDto, User user);
+    BlogResponseDto createBlog(BlogRequestDto requestDto, User user, MultipartFile multipartFile)
+        throws IOException;
 
     @Transactional(readOnly = true)
     List<BlogResponseDto> getBlogs();

@@ -29,6 +29,8 @@ public class Blog extends Timestamped {
     private String username;
     @Column
     private Long likeCount;
+    @Column
+    private String multiMediaUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -46,6 +48,14 @@ public class Blog extends Timestamped {
         this.username = user.getUsername();
         this.user = user;
         this.likeCount = 0L;
+    }
+
+    public Blog(BlogRequestDto requestDto, User user, String storedFileName) {
+        this.title = requestDto.getTitle();
+        this.contents = requestDto.getContents();
+        this.username = user.getUsername();
+        this.user = user;
+        this.multiMediaUrl = storedFileName;
     }
 
     public void update(UpdateBlogRequestDto requestDto) {

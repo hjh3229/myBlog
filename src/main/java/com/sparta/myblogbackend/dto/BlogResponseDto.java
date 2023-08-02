@@ -14,6 +14,7 @@ public class BlogResponseDto {
     private String username;
     private String title;
     private String contents;
+    private String multiMediaUrl;
     private List<CommentResponseDto> commentList;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
@@ -24,6 +25,7 @@ public class BlogResponseDto {
         this.username = blog.getUsername();
         this.title = blog.getTitle();
         this.contents = blog.getContents();
+        this.multiMediaUrl = blog.getMultiMediaUrl();
         this.commentList = new ArrayList<>();
         for (Comment comment : blog.getComments()) {
             CommentResponseDto commentResponseDto = new CommentResponseDto(comment);
